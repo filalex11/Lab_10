@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <stdlib.h>
+/*
+Вывести список имен всех функций, вызываемых в программе на языке С, содержащейся в символьном файле.
+*/
+
+
+
+int main () {
+	FILE *f = fopen ("file.txt", "r");
+	if (f == NULL) {
+		printf ("ERROR!\n");
+		return 1;
+	}
+	int i = 0;
+	char **string = (char**) malloc (256 * sizeof (char*));
+	while (i < 256) {
+		string[i] = (char*) malloc (256 * sizeof (char));
+		fgets (string[i], 255, f);
+		++i;
+	}
+	fclose(f);
+	while (*string) {
+		printf("%s\n", *string++);
+		++i;
+	}
+	return 0;
+}
