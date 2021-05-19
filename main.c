@@ -11,27 +11,40 @@ int main () {
 		printf ("ERROR!\n");
 		return 1;
 	}
+	int capacity = 1024;
 	char *word = (char*) malloc (256 * sizeof (char));
-	char *string = (char*) malloc (1024 * sizeof (char));
+	char *string = (char*) malloc (capacity * sizeof (char));
 	while (fgets (word, 255, f)) {
 		strcat (string, word);
+		if (capacity - strlen (string) < 255) {
+			capacity *= 2;
+			char *tmp = realloc (string, capacity * sizeof (char));
+			if (tmp == NULL) {
+				free (string);
+				printf ("NOT ENOUGH MEMORY!\n");
+				return 1;
+			} else {
+				string = tmp;
+			}
+		}
 	}
 	fclose (f);
 	free (word);
 	char **words = (char**) malloc ((word_count (string) + 1) * sizeof (char*));
 	argssplit (string, words);
-	/*while (*words) {
-		printf ("%s\n", *words++);
-	}*/
-	int i = 0;
+	int i = 0, j = 0;
 	while (words[i]) {
 		if ((search_sym (words[i]) == 1) && (check_operator (words[i - 1]))) {
-			printf ("%s\n", words[i - 1]);
+			while (words[i - 1][j]) {
+				if (((words[i - 1][j]) == '_') || (isalpha (words[i - 1][j]))) {
+					printf ("%c", words[i - 1][j]);
+				}
+				++j;
+			}
+			printf ("\n");
+			j = 0;
 		}
 		++i;
 	}
-	/*while (*words) {
-		printf ("%s\n", *words++);
-	}*/
 	return 0;
 }

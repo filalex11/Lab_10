@@ -5,11 +5,16 @@
 /*
 	Вывести список имен всех функций, вызываемых в программе на языке С, содержащейся в символьном файле.
 */
-int main () {
-	FILE *f = fopen ("file.txt", "r");
+int main (int argc, char *argv[]) {
+	if (argc != 2) {
+		printf ("USAGE: %s input_file\n", argv[0]);
+		return 2;
+	}
+	
+	FILE *f = fopen (argv[1], "r");
 	if (f == NULL) {
-		printf ("ERROR!\n");
-		return 1;
+		printf ("ERROR! FILE \"%s\" NOT FOUND!\n", argv[1]);
+		return 2;
 	}
 	int capacity = 1024;
 	char *word = (char*) malloc (256 * sizeof (char));
